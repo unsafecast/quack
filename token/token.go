@@ -9,6 +9,7 @@ type Kind int
 
 const (
 	KIND_INVALID Kind = iota
+	KIND_EOF
 	KIND_IDENT
 	KIND_NUM_LIT
 	KIND_EQUALS

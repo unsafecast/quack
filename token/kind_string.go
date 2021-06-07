@@ -9,16 +9,17 @@ func _() {
 	// Re-run the stringer command to generate them again.
 	var x [1]struct{}
 	_ = x[KIND_INVALID-0]
-	_ = x[KIND_IDENT-1]
-	_ = x[KIND_NUM_LIT-2]
-	_ = x[KIND_EQUALS-3]
-	_ = x[KIND_SEMICOLON-4]
-	_ = x[KIND_LET-5]
+	_ = x[KIND_EOF-1]
+	_ = x[KIND_IDENT-2]
+	_ = x[KIND_NUM_LIT-3]
+	_ = x[KIND_EQUALS-4]
+	_ = x[KIND_SEMICOLON-5]
+	_ = x[KIND_LET-6]
 }
 
-const _Kind_name = "KIND_INVALIDKIND_IDENTKIND_NUM_LITKIND_EQUALSKIND_SEMICOLONKIND_LET"
+const _Kind_name = "KIND_INVALIDKIND_EOFKIND_IDENTKIND_NUM_LITKIND_EQUALSKIND_SEMICOLONKIND_LET"
 
-var _Kind_index = [...]uint8{0, 12, 22, 34, 45, 59, 67}
+var _Kind_index = [...]uint8{0, 12, 20, 30, 42, 53, 67, 75}
 
 func (i Kind) String() string {
 	if i < 0 || i >= Kind(len(_Kind_index)-1) {

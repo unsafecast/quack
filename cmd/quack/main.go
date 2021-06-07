@@ -17,9 +17,12 @@ func main() {
 
 	lexer := lexer.New([]rune(string(code)))
 	parser := parser.New(lexer)
-	node, _ := parser.Stmt()
-	fmt.Println(ast.NodeToString(node))
-
-	node, _ = parser.Assignment()
-	fmt.Println(ast.NodeToString(node))
+	parser.Loop(func(node ast.Node, err error) {
+		if node != nil {
+			fmt.Println(ast.NodeToString(node))
+		} else {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+	})
 }

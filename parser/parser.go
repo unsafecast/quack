@@ -17,6 +17,12 @@ func New(lexer *lexer.Lexer) *Parser {
 	}
 }
 
+func (parser *Parser) Loop(callback func(ast.Node, error)) {
+	for parser.lexer.CurrentToken.Kind != token.KIND_EOF {
+		callback(parser.Stmt())
+	}
+}
+
 func (parser *Parser) Ident() (ast.Node, error) {
 	tok := parser.lexer.CurrentToken
 
