@@ -10,8 +10,7 @@ type Lexer struct {
 	CurrentToken token.Token
 	PeekToken    token.Token
 
-	Offset     int64
-	usedOffset int64
+	Offset int64
 
 	source   []rune
 	currChar rune
@@ -19,10 +18,9 @@ type Lexer struct {
 
 func New(source []rune) *Lexer {
 	lexer := &Lexer{
-		source:     source,
-		currChar:   source[0],
-		Offset:     0,
-		usedOffset: 0,
+		source:   source,
+		currChar: source[0],
+		Offset:   0,
 	}
 
 	// - This is so we have a valid state
@@ -39,17 +37,20 @@ func (lexer *Lexer) Next() token.Token {
 		lexer.advance()
 	}
 
-	lexer.usedOffset = lexer.Offset
-	the := token.Invalid(lexer.currChar, lexer.usedOffset)
+	usedOffset := lexer.Offset
+	the := token.Invalid(lexer.currChar, usedOffset)
 
 	switch lexer.currChar {
 	case '=':
 		lexer.advance()
-		the = token.FromKind(token.KIND_EQUALS, lexer.usedOffset)
+		the = token.FromKind(token.KIND_EQUALS, usedOffset)
 
 	case ';':
 		lexer.advance()
-		the = token.FromKind(token.KIND_SEMICOLON, lexer.usedOffset)
+		the = token.FromKind(token.KIND_SEMICOLON, usedOffset)
+
+	case '\000':
+		the = token.FromKind(token.KIND_EOF, usedOffset)
 
 	default:
 		if unicode.IsLetter(lexer.currChar) {
@@ -74,9 +75,9 @@ func (lexer *Lexer) Ident() token.Token {
 	val := lexer.source[start:lexer.Offset]
 	switch string(val) {
 	case "let":
-		return token.FromKind(token.KIND_LET, lexer.usedOffset)
+		return token.FromKind(token.KIND_LET, start)
 	default:
-		return token.Ident(val, lexer.usedOffset)
+		return token.Ident(val, start)
 	}
 }
 
@@ -85,7 +86,7 @@ func (lexer *Lexer) Number() token.Token {
 	for isPartOfNumber(lexer.currChar) {
 		lexer.advance()
 	}
-	return token.NumLit(lexer.source[start:lexer.Offset], lexer.usedOffset)
+	return token.NumLit(lexer.source[start:lexer.Offset], start)
 }
 
 func (lexer *Lexer) advance() {
